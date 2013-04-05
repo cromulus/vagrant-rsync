@@ -1,5 +1,4 @@
 require 'optparse'
-require 'pp'
 module VagrantPlugins
   module CommandRSYNC
     class Command < Vagrant.plugin("2", :command)
