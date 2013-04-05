@@ -27,3 +27,7 @@ It might destroy all your data and turn your co-workers into angry badgers. Be f
 
 Can be mixed in with Guard or kicker or what-have-you to rsync whenever the host filesystem changes.
 
+```bash
+kicker -e "vagrant rsync" .
+```
+
