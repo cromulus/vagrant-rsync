@@ -1,7 +1,7 @@
 # Vagrant Rsync Plugin
 This is a [Vagrant](http://www.vagrantup.com) 1.1+ plugin that adds an rsync command to vagrant, allowing you to use a filesystem watcher to sync your shared directories with your guest machines.
 
-**NOTE:** This plugin requires Vagrant 1.1+, and (rsync)[http://rsync.samba.org/]
+**NOTE:** This plugin requires Vagrant 1.1+, and [rsync](http://rsync.samba.org/)
 
 Based off of [Vagrant-Sync](https://github.com/calavera/vagrant-sync)
 
