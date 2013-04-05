@@ -3,6 +3,8 @@ This is a [Vagrant](http://www.vagrantup.com) 1.1+ plugin that adds an rsync com
 
 **NOTE:** This plugin requires Vagrant 1.1+,
 
+Based off of [Vagrant-Sync](https://github.com/calavera/vagrant-sync)
+
 ## Features
 * automatically detects all shared folders.
 * syncs em up.
@@ -21,4 +23,7 @@ The guest must be up and running.
 Note: This plugin is meant for interacting with guests that are not running on your local machine.
 I have no idea what will happen if you are sharing with NFS or virtualbox shared folders.
 It might destroy all your data and turn your co-workers into angry badgers. Be forewarned.
+
+
+Can be mixed in with Guard or kicker or what-have-you to rsync whenever the host filesystem chagnes.
 
