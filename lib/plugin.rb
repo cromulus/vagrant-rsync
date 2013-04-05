@@ -11,7 +11,7 @@ if Vagrant::VERSION < "1.1.0"
 end
 
 module VagrantPlugins
-  module CommandSSH
+  module CommandRSYNC
     class Plugin < Vagrant.plugin("2")
       name "rsync command"
       description <<-DESC
@@ -19,7 +19,7 @@ module VagrantPlugins
       DESC
 
       command("rsync") do
-        require File.expand_path("command", __FILE__)
+        require File.expand_path("../command.rb", __FILE__)
         Command
       end
     end
