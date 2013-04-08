@@ -30,16 +30,22 @@ module VagrantPlugins
             guestpath = data[:guestpath]
             ssh_info  = vm.ssh_info
 
-            ssh_options = "-p#{ssh_info[:port]} -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oPasswordAuthentication=no -oIdentitiesOnly=yes -i#{ssh_info[:private_key_path]}"
-            ssh_host    = "#{ssh_info[:username]}@#{ssh_info[:host]}:#{guestpath}"
+            rsync_options = "-aze --exclude #{vm.env.root_path}/.vagrant/ "
+            rsync_options << '-vvv' if options[:verbose]
 
-            rsync_options = '-aze --exclude .vagrant/'
-            rsync_options << 'vvv' if options[:verbose]
+            command = [
+              "rsync", "--verbose", "--archive", "-z",
+              "--exclude", ".vagrant/",
+              "-e", "ssh -p #{ssh_info[:port]} -o StrictHostKeyChecking=no -i '#{ssh_info[:private_key_path]}'",
+              hostpath,
+              "#{ssh_info[:username]}@#{ssh_info[:host]}:#{guestpath}"]
 
-            command = 'rsync %s --delete %s -e "ssh %s" %s' % [rsync_options, hostpath, ssh_options, ssh_host]
-            puts command if options[:verbose]
 
-            r = Vagrant::Util::Subprocess.execute(command)
+            if options[:verbose]
+              puts command.join(" ")
+            end
+
+            r = Vagrant::Util::Subprocess.execute(*command)
             if r.exit_code != 0
               raise Errors::RsyncError,
                 :guestpath => guestpath,
