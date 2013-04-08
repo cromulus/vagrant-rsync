@@ -1,4 +1,5 @@
 require 'optparse'
+require 'pp'
 module VagrantPlugins
   module CommandRSYNC
     class Command < Vagrant.plugin("2", :command)
@@ -23,8 +24,7 @@ module VagrantPlugins
 
         with_target_vms(argv) do |vm|
           vm.config.vm.synced_folders.each do |id, data|
-            next if opts[:nfs]
-
+            next if data[:nfs]
             hostpath  = File.expand_path(data[:hostpath], vm.env.root_path)
             hostpath = "#{hostpath}/" if hostpath !~ /\/$/
             guestpath = data[:guestpath]
