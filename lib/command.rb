@@ -35,7 +35,7 @@ module VagrantPlugins
 
             command = [
               "rsync", "--verbose", "--archive", "-z",
-              "--exclude", ".vagrant/",
+              "--exclude --delete", ".vagrant/",
               "-e", "ssh -p #{ssh_info[:port]} -o StrictHostKeyChecking=no -i '#{ssh_info[:private_key_path]}'",
               hostpath,
               "#{ssh_info[:username]}@#{ssh_info[:host]}:#{guestpath}"]

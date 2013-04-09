@@ -5,6 +5,8 @@
 *.gem
 .bundle
 pkg/*
+bin/*
+tmp/*
 tags
 Gemfile.lock
 

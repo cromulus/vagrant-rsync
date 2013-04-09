@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# to test this plugin, just copy this file to ./Vagrantfile
+# and replace your aws credentials
+
+
+Vagrant.configure("2") do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = "dummy"
+
+  # The url from where the 'config.vm.box' box will be fetched if it
+  # doesn't already exist on the user's system.
+  config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+
+  config.vm.provider :aws do |aws|
+    aws.access_key_id = "your_key"
+    aws.secret_access_key = "your_secret"
+    aws.keypair_name = "your_keypair"
+    aws.ssh_private_key_path = "your_keypair_secret_path"
+
+    aws.ami = "ami-7747d01e"
+    aws.ssh_username = "ubuntu"
+  end
+end
