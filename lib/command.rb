@@ -1,5 +1,4 @@
 require 'optparse'
-require 'pp'
 module VagrantPlugins
   module CommandRSYNC
     class Command < Vagrant.plugin("2", :command)
@@ -34,8 +33,8 @@ module VagrantPlugins
             rsync_options << '-vvv' if options[:verbose]
 
             command = [
-              "rsync", "--verbose", "--archive", "-z",
-              "--exclude --delete", ".vagrant/",
+              "rsync", "--verbose", "--delete", "--archive", "-z",
+              "--exclude", ".vagrant/",
               "-e", "ssh -p #{ssh_info[:port]} -o StrictHostKeyChecking=no -i '#{ssh_info[:private_key_path]}'",
               hostpath,
               "#{ssh_info[:username]}@#{ssh_info[:host]}:#{guestpath}"]
