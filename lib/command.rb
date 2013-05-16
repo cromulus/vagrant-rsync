@@ -24,6 +24,10 @@ module VagrantPlugins
             vm.communicate.sudo("emerge rsync")
           when :arch
             vm.communicate.sudo("pacman -s rsync")
+          # when :solaris
+          #   vm.communicate.sudo("pkg install rsync")
+          # when :freebsd
+          #   vm.communicate.sudo("pkg_add -r rsync")
           else
             raise RsyncNotAvailableError
           end
