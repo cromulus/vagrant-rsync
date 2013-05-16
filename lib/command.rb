@@ -2,6 +2,34 @@ require 'optparse'
 module VagrantPlugins
   module CommandRSYNC
     class Command < Vagrant.plugin("2", :command)
+
+      class RsyncNotAvailableError < Vagrant::Errors::VagrantError
+        error_namespace("vagrant.plugin.vagrant-rsync")
+      end
+
+      def verify_rsync(vm)
+
+        begin
+          vm.communicate.execute("rsync")
+        rescue
+          case vm.guest.detect!
+          when :debian, :ubuntu
+            vm.communicate.sudo("apt-get update")
+            vm.communicate.sudo("apt-get install rsync")
+          when :fedora, :centos, :redhat
+            vm.communicate.sudo("yum install rsync")
+          when :suse
+            vm.communicate.sudo("yast2 -i rsync")
+          when :gentoo
+            vm.communicate.sudo("emerge rsync")
+          when :arch
+            vm.communicate.sudo("pacman -s rsync")
+          else
+            raise RsyncNotAvailableError
+          end
+        end
+      end
+
       def execute
         options = {}
 
@@ -16,12 +44,16 @@ module VagrantPlugins
         unless argv
           argv=["default"]
         end
+
         with_target_vms(argv) do |vm|
           raise Vagrant::Errors::VMNotCreatedError if vm.state.id == :not_created
           raise Vagrant::Errors::VMInaccessible if vm.state.id == :inaccessible
         end
 
         with_target_vms(argv) do |vm|
+
+          verify_rsync(vm)
+
           vm.config.vm.synced_folders.each do |id, data|
             next if data[:nfs]
             hostpath  = File.expand_path(data[:hostpath], vm.env.root_path)
