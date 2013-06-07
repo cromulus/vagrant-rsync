@@ -1,4 +1,5 @@
 require 'optparse'
+require 'pp'
 module VagrantPlugins
   module CommandRSYNC
     class Command < Vagrant.plugin("2", :command)
@@ -8,11 +9,11 @@ module VagrantPlugins
       end
 
       def verify_rsync(vm)
-
         begin
-          vm.communicate.execute("rsync")
-        rescue
-          case vm.guest.detect!
+          vm.communicate.execute("rsync --version")
+        rescue Exception => e
+          # should notify people we are installing rsync here.
+          case vm.guest.name
           when :debian, :ubuntu
             vm.communicate.sudo("apt-get update")
             vm.communicate.sudo("apt-get install rsync")
@@ -77,6 +78,7 @@ module VagrantPlugins
 
 
             if options[:verbose]
+              ## should the vagrant way of outputting text
               puts command.join(" ")
             end
 
