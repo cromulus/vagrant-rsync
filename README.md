@@ -8,6 +8,7 @@ Based off of [Vagrant-Sync](https://github.com/calavera/vagrant-sync)
 ## Features
 * automatically detects all shared folders, on all named machines
 * syncs em up.
+* install rsync automatically on a variety of linux based guests. (turn off with --no-install)
 
 ## Usage
 
@@ -24,6 +25,7 @@ Note: This plugin is meant for interacting with guests that are not running on y
 I have no idea what will happen if you are sharing with NFS or virtualbox shared folders.
 It might destroy all your data and turn your co-workers into angry badgers. Be forewarned.
 
+If you'd like me to add new guests to the rsync auto-install, send me the command to install rsync, and I'll make it happen.
 
 Can be mixed in with Guard or kicker or what-have-you to rsync whenever the host filesystem changes.
 
