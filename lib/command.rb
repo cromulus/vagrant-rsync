@@ -12,6 +12,7 @@ module VagrantPlugins
         begin
           vm.communicate.execute("rsync --version")
         rescue Exception => e
+          @env.ui.say(:info, "rsync not found, installing rsync now. disable this with --no-install")
           # should notify people we are installing rsync here.
           case vm.guest.name
           when :debian, :ubuntu
@@ -36,12 +37,20 @@ module VagrantPlugins
       end
 
       def execute
-        options = {}
+        options = { :install_rsync => true,
+                    :verbose    => false}
 
         opts = OptionParser.new do |opt|
           opt.banner = "Usage: vagrant rsync [vm-name]"
-          opt.on('--verbose') do |v|
+          opt.on("-n","--no-install", "do not attempt to install rysnc if not found") do |v|
+            options[:install_rsync] = false
+          end
+          opt.on('-v','--verbose',"Run verbosely") do |v|
             options[:verbose] = true
+          end
+          opts.on( '-h', '--help', 'Display this screen' ) do
+            puts opts
+            exit
           end
         end
 
@@ -57,7 +66,10 @@ module VagrantPlugins
 
         with_target_vms(argv) do |vm|
 
-          verify_rsync(vm)
+          if options[:install_rsync]
+            @env.ui.say(:info,"checking if rsync exists on host")
+            verify_rsync(vm)
+          end
 
           vm.config.vm.synced_folders.each do |id, data|
             next if data[:nfs]
@@ -79,10 +91,12 @@ module VagrantPlugins
 
             if options[:verbose]
               ## should the vagrant way of outputting text
-              puts command.join(" ")
+              @env.ui.say(:info,command.join(" "))
             end
 
             r = Vagrant::Util::Subprocess.execute(*command)
+            @env.ui.say(:info, "done") if options[:verbose]
+            pp r.inspect
             if r.exit_code != 0
               raise Errors::RsyncError,
                 :guestpath => guestpath,
