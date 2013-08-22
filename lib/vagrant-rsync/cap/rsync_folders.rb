@@ -1,27 +1,15 @@
 module VagrantPlugins
   module Rsync
-    module Action
+    module Cap
       class RsyncFolders
-        def initialize(app, env)
-          @app = app
-          @env = env
-          @machine = env[:machine]
-        end
-
-        def call(env)
-          @app.call(env)
-
-          rsync_folders
-        end
-
-        def rsync_folders
-          @machine.config.vm.synced_folders.each do |id, data|
+        def self.rsync_folders(machine)
+          machine.config.vm.synced_folders.each do |id, data|
             next if data[:nfs]
 
-            hostpath  = File.expand_path(data[:hostpath], @machine.env.root_path)
+            hostpath  = File.expand_path(data[:hostpath], machine.env.root_path)
             hostpath = "#{hostpath}/" if hostpath !~ /\/$/
             guestpath = data[:guestpath]
-            ssh_info  = @machine.ssh_info
+            ssh_info  = machine.ssh_info
 
             command = [
               "rsync", "--verbose", "--delete", "--archive", "-z",
@@ -36,11 +24,11 @@ module VagrantPlugins
 
             if options[:verbose]
               ## should the vagrant way of outputting text
-              @env.ui.say(:info,command.join(" "))
+              #@env.ui.say(:info,command.join(" "))
             end
 
             r = Vagrant::Util::Subprocess.execute(*command)
-            @env.ui.say(:info, "done") if options[:verbose]
+            #@env.ui.say(:info, "done") if options[:verbose]
             if r.exit_code != 0
               raise Errors::RsyncError,
                 :guestpath => guestpath,

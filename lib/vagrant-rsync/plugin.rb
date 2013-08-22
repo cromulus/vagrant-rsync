@@ -22,6 +22,16 @@ module VagrantPlugins
         require_relative 'command'
         Command
       end
+
+      guest_capability("linux", "ensure_rsync") do
+        require_relative "cap/ensure_rsync"
+        Cap::EnsureRsync
+      end
+
+      guest_capability("linux", "rsync_folders") do
+        require_relative "cap/rsync_folders"
+        Cap::RsyncFolders
+      end
     end
   end
 end

@@ -1,20 +1,21 @@
 require 'optparse'
-require_relative 'action'
 
 module VagrantPlugins
   module Rsync
     class Command < Vagrant.plugin("2", :command)
 
       def execute
-        options = { :install_rsync => true,
-                    :verbose    => false}
+        options = {
+          :install_rsync => true,
+          :verbose => false
+        }
 
         opts = OptionParser.new do |opt|
           opt.banner = "Usage: vagrant rsync [vm-name]"
-          opt.on("-n","--no-install", "do not attempt to install rysnc if not found") do |v|
+          opt.on("-n", "--no-install", "Do not attempt to install rysnc if not found") do |v|
             options[:install_rsync] = false
           end
-          opt.on('-v','--verbose',"Run verbosely") do |v|
+          opt.on('-v', '--verbose', "Run verbosely") do |v|
             options[:verbose] = true
           end
           opt.on( '-h', '--help', 'Display this screen' ) do
@@ -35,11 +36,10 @@ module VagrantPlugins
 
         with_target_vms(argv) do |vm|
           if options[:install_rsync]
-            #vm.action(::VagrantPlugins::Rsync::Action.ensure_rsync)
-            vm.action(:ensure_rsync)
+            vm.guest.capability(:ensure_rsync)
           end
 
-          vm.action(:rsync_folders)
+          vm.guest.capability(:rsync_folders)
 
         end
       end
