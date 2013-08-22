@@ -37,7 +37,7 @@ module VagrantPlugins
         with_target_vms(argv) do |machine|
           if options[:install_rsync]
             @env.ui.info I18n.t('vagrant_rsync.ensure_rsync')
-            machine.guest.capability(:ensure_rsync)
+            machine.guest.capability(:ensure_rsync, @env)
           end
 
           @env.ui.info I18n.t('vagrant_rsync.rsync_folders')

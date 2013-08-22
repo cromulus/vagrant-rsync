@@ -5,10 +5,15 @@ module VagrantPlugins
     module Cap
       class EnsureRsync
 
-        def self.ensure_rsync(machine)
+        def self.ensure_rsync(machine, env)
           return unless machine.communicate.ready?
 
-          install_rsync!(machine) unless rsync_installed?(machine)
+          if rsync_installed?(machine)
+            env.ui.info I18n.t('vagrant_rsync.rsync_installed')
+          else
+            env.ui.info I18n.t('vagrant_rsync.installing_rsync')
+            install_rsync!(machine)
+          end
         end
 
         def self.rsync_installed?(machine)
