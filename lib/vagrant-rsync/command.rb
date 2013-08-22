@@ -3,45 +3,45 @@ require 'optparse'
 module VagrantPlugins
   module Rsync
     class Command < Vagrant.plugin("2", :command)
-
       def execute
-        options = {
-          :install_rsync => true,
-          :verbose => false
-        }
+        options = {}
+        options[:install_rsync] = true
+        options[:verbose] = false
 
-        opts = OptionParser.new do |opt|
-          opt.banner = "Usage: vagrant rsync [vm-name]"
-          opt.on("-n", "--no-install", "Do not attempt to install rysnc if not found") do |v|
-            options[:install_rsync] = false
+        opts = OptionParser.new do |o|
+          o.banner = "Usage: vagrant rsync [vm-name]"
+
+          o.on("-n", "--no-install", "Do not attempt to install rysnc if not found") do |ni|
+            options[:install_rsync] = !ni
           end
-          opt.on('-v', '--verbose', "Run verbosely") do |v|
-            options[:verbose] = true
+
+          o.on('-v', '--verbose', "Run verbosely") do |v|
+            options[:verbose] = v
           end
-          opt.on( '-h', '--help', 'Display this screen' ) do
+
+          o.on( '-h', '--help', 'Display this screen' ) do
             puts opts
             exit
           end
         end
 
+        # Parse the options
         argv = parse_options(opts)
-        unless argv
-          argv=["default"]
-        end
+        return if !argv
 
         with_target_vms(argv) do |vm|
           raise Vagrant::Errors::VMNotCreatedError if vm.state.id == :not_created
           raise Vagrant::Errors::VMInaccessible if vm.state.id == :inaccessible
         end
 
-        with_target_vms(argv) do |vm|
+        with_target_vms(argv) do |machine|
           if options[:install_rsync]
-            vm.guest.capability(:ensure_rsync)
+            machine.guest.capability(:ensure_rsync)
           end
 
-          vm.guest.capability(:rsync_folders)
-
+          machine.guest.capability(:rsync_folders)
         end
+
       end
     end
   end
