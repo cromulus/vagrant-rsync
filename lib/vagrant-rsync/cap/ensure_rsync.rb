@@ -8,35 +8,29 @@ module VagrantPlugins
         def self.ensure_rsync(machine)
           return unless machine.communicate.ready?
 
-          if rsync_installed?(machine)
-            # TO DO: Figure out how to output in cap
-            #env[:ui].info I18n.t('vagrant-rsync.action.installed')
-          else
-            #env[:ui].info I18n.t('vagrant-rsync.action.installing')
-            install_rsync!(machine)
-          end
+          install_rsync!(machine) unless rsync_installed?(machine)
         end
 
         def self.rsync_installed?(machine)
-          machine.communicate.execute("rsync --version")
+          machine.communicate.execute("rsync --version") rescue false
         end
 
         def self.install_rsync!(machine)
-          machine.communicate.sudo.tap do |comm|
+          machine.communicate.tap do |comm|
             case machine.guest.name
             when :debian, :ubuntu
-              comm "apt-get update"
-              comm "apt-get install rsync"
+              comm.sudo "apt-get update"
+              comm.sudo "apt-get install rsync"
             when :fedora, :centos, :redhat
-              comm "yum install rsync"
+              comm.sudo "yum install rsync"
             when :suse
-              comm "yast2 -i rsync"
+              comm.sudo "yast2 -i rsync"
             when :gentoo
-              comm "emerge rsync"
+              comm.sudo "emerge rsync"
             when :arch
-              comm "pacman -s rsync"
+              comm.sudo "pacman -s rsync"
             else
-              raise RsyncNotAvailableError
+              raise Errors::RsyncNotAvailableError, guest: machine.guest.name
             end
           end
         end
