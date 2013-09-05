@@ -10,8 +10,11 @@ if Vagrant::VERSION < "1.1.0"
   raise "The Vagrant AWS plugin is only compatible with Vagrant 1.1+"
 end
 
+# Add our custom translations to the load path
+I18n.load_path << File.expand_path("../../../locales/en.yml", __FILE__)
+
 module VagrantPlugins
-  module CommandRSYNC
+  module Rsync
     class Plugin < Vagrant.plugin("2")
       name "rsync command"
       description <<-DESC
@@ -19,8 +22,18 @@ module VagrantPlugins
       DESC
 
       command("rsync") do
-        require File.expand_path("../command.rb", __FILE__)
+        require_relative 'command'
         Command
+      end
+
+      guest_capability("linux", "ensure_rsync") do
+        require_relative "cap/ensure_rsync"
+        Cap::EnsureRsync
+      end
+
+      guest_capability("linux", "rsync_folders") do
+        require_relative "cap/rsync_folders"
+        Cap::RsyncFolders
       end
     end
   end

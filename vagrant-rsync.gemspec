@@ -1,9 +1,9 @@
 $:.unshift File.expand_path("../lib", __FILE__)
-require "version"
+require 'vagrant-rsync/version'
 
 Gem::Specification.new do |s|
   s.name          = "vagrant-rsync"
-  s.version       = VagrantPlugins::RSYNC::VERSION
+  s.version       = VagrantPlugins::Rsync::VERSION
   s.platform      = Gem::Platform::RUBY
   s.authors       = "Bill Cromie"
   s.email         = "bill@cromie.org"

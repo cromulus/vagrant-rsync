@@ -1,0 +1,14 @@
+en:
+  vagrant_rsync:
+    ensure_rsync: |-
+      Ensuring that rsync is installed on guest.
+    rsync_installed: |-
+      Rsync already installed.
+    installing_rsync: |-
+      Installing rsync...
+    rsync_folders: |-
+      Syncing shared folders to guest with rsync...
+  vagrant:
+    errors:
+      rsync_not_available: |-
+        Unable to install rsync on a machine of guest type '%{guest}'.
