@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.name          = "vagrant-rsync"
   s.version       = VagrantPlugins::Rsync::VERSION
   s.platform      = Gem::Platform::RUBY
-  s.authors       = "Bill Cromie"
-  s.email         = "bill@cromie.org"
+  s.authors       = ["Bill Cromie", "Patrick Connolly"]
+  s.email         = ["bill@cromie.org","patrick@myplanetdigital.com"]
   s.homepage      = "https://github.com/cromulus/vagrant-rsync"
   s.summary       = "Enables Vagrant to rsync shared folders on remote guests with grace and aplomb."
   s.description   = "Enables Vagrant to rsync shared folders on remote guests with grace and aplomb."
