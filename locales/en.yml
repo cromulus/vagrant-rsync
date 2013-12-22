@@ -8,7 +8,9 @@ en:
       Installing rsync...
     rsync_folders: |-
       Syncing shared folders to guest with rsync...
-  vagrant:
+  vagrant_rsync:
     errors:
       rsync_not_available: |-
         Unable to install rsync on a machine of guest type '%{guest}'.
+      rsync_failed: |-
+        Unable to execute rsync on host to sync with '%{guest}'.
