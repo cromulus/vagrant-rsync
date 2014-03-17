@@ -25,9 +25,9 @@ module VagrantPlugins
             case machine.guest.name
             when :debian, :ubuntu
               comm.sudo "apt-get update"
-              comm.sudo "apt-get install rsync"
+              comm.sudo "apt-get install rsync -y"
             when :fedora, :centos, :redhat
-              comm.sudo "yum install rsync"
+              comm.sudo "yum install rsync -y"
             when :suse
               comm.sudo "yast2 -i rsync"
             when :gentoo
