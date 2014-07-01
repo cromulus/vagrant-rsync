@@ -18,10 +18,12 @@ module VagrantPlugins
     class Plugin < Vagrant.plugin("2")
       name "rsync command"
       description <<-DESC
+      THIS PLUGIN IS DEPRECATED: use a recent vagrant 1.5+ for rsync-ed folders.
       The `rsync` command allows you to sync the files in your working directories to the guest.
       DESC
 
       command("rsync") do
+        
         require_relative 'command'
         Command
       end

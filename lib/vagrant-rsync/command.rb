@@ -9,7 +9,7 @@ module VagrantPlugins
         options[:verbose] = false
 
         opts = OptionParser.new do |o|
-          o.banner = "Usage: vagrant rsync [vm-name]"
+          o.banner = "DEPRECATED!! Usage: vagrant rsync [vm-name]"
 
           o.on("-n", "--no-install", "Do not attempt to install rysnc if not found") do |ni|
             options[:install_rsync] = !ni
